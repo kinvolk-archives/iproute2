@@ -32,8 +32,10 @@ int emain(struct __sk_buff *skb)
 	int key = 0, *val;
 
 	val = map_lookup_elem(&map_sh, &key);
-	if (val)
+	if (val) {
+		printt("egress: map val: %d\n", *val);
 		lock_xadd(val, 1);
+	}
 
 	return BPF_H_DEFAULT;
 }
@@ -44,8 +46,10 @@ int imain(struct __sk_buff *skb)
 	int key = 0, *val;
 
 	val = map_lookup_elem(&map_sh, &key);
-	if (val)
-		printt("map val: %d\n", *val);
+	if (val) {
+		printt("ingress: map val: %d\n", *val);
+		lock_xadd(val, 1);
+	}
 
 	return BPF_H_DEFAULT;
 }
